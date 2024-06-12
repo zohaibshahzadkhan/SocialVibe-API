@@ -1,6 +1,12 @@
 
 from pathlib import Path
 from datetime import timedelta
+import os
+import dj_database_url
+
+if os.path.exists("env.py"):
+    import env
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,12 +15,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g9j!t9j=&eyeb&1xkp!=pl0856zh#wb5csj!wv!$ldouj!-qu+'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),'localhost', '127.0.0.1']
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -33,13 +39,20 @@ REST_FRAMEWORK = {
     )
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+if "DEV" not in os.environ:
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
+        "rest_framework.renderers.JSONRenderer",
+    ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-]
+CORS_ALLOWED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = []
+
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS.append(os.environ.get('CLIENT_ORIGIN'))
+    CSRF_TRUSTED_ORIGINS.append(os.environ.get('CLIENT_ORIGIN'))
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    CORS_ALLOWED_ORIGINS.append(os.environ.get('CLIENT_ORIGIN_DEV'))
+    CSRF_TRUSTED_ORIGINS.append(os.environ.get('CLIENT_ORIGIN_DEV'))
 
 # Application definition
 
@@ -88,17 +101,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
+if 'DEV' in os.environ:
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.sqlite3',
+             'NAME': BASE_DIR / 'db.sqlite3',
+         }
+     }
+else:
+     DATABASES = {
+         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+     }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
