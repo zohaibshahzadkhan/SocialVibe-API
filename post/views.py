@@ -49,6 +49,7 @@ def post_create(request):
             post.attachments.add(attachment)
 
         user = request.user
+        user.posts_count = user.posts_count + 1
         user.save()
 
         serializer = PostSerializer(post)
