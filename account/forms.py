@@ -7,4 +7,9 @@ from .models import User
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('email', 'name', 'password1', 'password2')
+        fields = ('email', 'name', 'password1', 'password2','avatar')
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'name', 'avatar')

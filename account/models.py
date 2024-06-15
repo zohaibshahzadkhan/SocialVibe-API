@@ -1,8 +1,9 @@
 import uuid
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
+import os
+from django.conf import settings
 
 
 
@@ -51,7 +52,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-
+    
+    def get_avatar(self):
+        allowed_host = os.getenv('ALLOWED_HOST')
+    
+        if settings.DEBUG:
+            client_origin = os.getenv('ALLOWED_HOST')
+        else:
+            client_origin = f"https://{allowed_host}"
+    
+        if self.avatar:
+            return client_origin + self.avatar.url
+        else:
+            return 'https://picsum.photos/200/200'
+        
 class FriendshipRequest(models.Model):
     SENT = 'sent'
     ACCEPTED = 'accepted'
