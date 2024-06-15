@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.avatar:
             return client_origin + self.avatar.url
         else:
-            return 'https://picsum.photos/200/200'
+            return client_origin + "media/default_profile.jpg"
         
 class FriendshipRequest(models.Model):
     SENT = 'sent'
