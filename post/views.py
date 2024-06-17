@@ -88,7 +88,11 @@ def post_create_comment(request, pk):
     post.comments.add(comment)
     post.comments_count = post.comments_count + 1
     post.save()
-
     serializer = CommentSerializer(comment)
-
     return JsonResponse(serializer.data, safe=False)
+
+@api_view(['DELETE'])
+def post_delete(request, pk):
+    post = Post.objects.filter(created_by=request.user).get(pk=pk)
+    post.delete()
+    return JsonResponse({'message': 'post deleted'})
