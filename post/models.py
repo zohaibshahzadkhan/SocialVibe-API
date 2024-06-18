@@ -2,8 +2,6 @@ import uuid
 from django.db import models
 from django.utils.timesince import timesince
 from account.models import User
-from django.conf import settings
-import os
 
 class Like(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -29,16 +27,9 @@ class PostAttachment(models.Model):
     created_by = models.ForeignKey(User, related_name='post_attachments', on_delete=models.CASCADE)
 
 
-    def get_image(self):
-        allowed_host = os.getenv('ALLOWED_HOST')
-    
-        if settings.DEBUG:
-            client_origin = os.getenv('ALLOWED_HOST')
-        else:
-            client_origin = f"https://{allowed_host}"
-    
+    def get_image(self):    
         if self.image:
-            return client_origin + self.image.url
+            return self.image.url
         else:
             return 'https://picsum.photos/200/200'
 

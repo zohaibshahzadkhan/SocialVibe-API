@@ -2,9 +2,6 @@ import uuid
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
-import os
-from django.conf import settings
-
 
 
 class CustomUserManager(UserManager):
@@ -54,17 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     
     def get_avatar(self):
-        allowed_host = os.getenv('ALLOWED_HOST')
-    
-        if settings.DEBUG:
-            client_origin = os.getenv('ALLOWED_HOST')
-        else:
-            client_origin = f"https://{allowed_host}"
-    
         if self.avatar:
-            return client_origin + self.avatar.url
+            return self.avatar.url
         else:
-            return client_origin + "media/default_profile.jpg"
+            return "https://res.cloudinary.com/dceudxuqq/image/upload/v1718720898/media/profile_gs8tic.png"
         
 class FriendshipRequest(models.Model):
     SENT = 'sent'
