@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .forms import SignupForm, ProfileForm
 from .models import User, FriendshipRequest
 from .serializers import UserSerializer, FriendshipRequestSerializer
+from django.db.models import Q
+
+
 
 @api_view(['GET'])
 def me(request):
@@ -52,16 +55,28 @@ def send_friendship_request(request, pk):
 def friends(request, pk):
     user = User.objects.get(pk=pk)
     requests = []
+    can_send_request = True 
 
     if user == request.user:
         requests = FriendshipRequest.objects.filter(created_for=request.user, status=FriendshipRequest.SENT)
 
+    existing_request = FriendshipRequest.objects.filter(
+        (Q(created_for=user) & Q(created_by=request.user)) |
+        (Q(created_for=request.user) & Q(created_by=user))
+    ).first()
+
+    are_friends = user.friends.filter(pk=request.user.pk).exists()
+     
+    if (existing_request and existing_request.status == FriendshipRequest.SENT) or are_friends:
+        can_send_request = False
+        
     friends = user.friends.all()
 
     return JsonResponse({
         'user': UserSerializer(user).data,
         'friends': UserSerializer(friends, many=True).data,
-        'requests': FriendshipRequestSerializer(requests, many=True).data
+        'requests': FriendshipRequestSerializer(requests, many=True).data,
+        'can_send_request': can_send_request
     }, safe=False)
 
 
