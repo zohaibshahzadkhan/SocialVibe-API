@@ -83,19 +83,30 @@ def friends(request, pk):
 @api_view(['POST'])
 def handle_request(request, pk, status):
     user = User.objects.get(pk=pk)
-    friendship_request = FriendshipRequest.objects.filter(created_for=request.user).get(created_by=user)
+    try:
+        friendship_request = FriendshipRequest.objects.get(created_for=request.user, created_by=user)
+    except FriendshipRequest.DoesNotExist:
+        return JsonResponse({'error': 'Friendship request not found'}, status=404)
+
+    if status not in [FriendshipRequest.ACCEPTED, FriendshipRequest.REJECTED]:
+        return JsonResponse({'error': 'Invalid status'}, status=400)
+
     friendship_request.status = status
     friendship_request.save()
 
-    user.friends.add(request.user)
-    user.friends_count = user.friends_count + 1
-    user.save()
+    if status == FriendshipRequest.ACCEPTED:
+        user.friends.add(request.user)
+        user.friends_count += 1
+        user.save()
 
-    request_user = request.user
-    request_user.friends_count = request_user.friends_count + 1
-    request_user.save()
+        request_user = request.user
+        request_user.friends.add(user)
+        request_user.friends_count += 1
+        request_user.save()
+    elif status == FriendshipRequest.REJECTED:
+        friendship_request.delete()
 
-    return JsonResponse({'message': 'friendship request updated'})
+    return JsonResponse({'message': 'Friendship request updated', 'status': status})
 
 @api_view(['POST'])
 def editprofile(request):
