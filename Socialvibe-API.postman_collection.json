@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "5548cb8f-9dff-4edd-9553-c3bd473ae228",
+		"name": "Socialvibe API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2323930"
+	},
+	"item": [
+		{
+			"name": "Register a New User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"newuser@example.com\",\n  \"name\": \"New User\",\n  \"password1\": \"password123\",\n  \"password2\": \"password123\"\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain JWT Token (Login)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh JWT Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"refresh\": \"<refresh_token>\"\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/refresh"
+			},
+			"response": []
+		},
+		{
+			"name": "My Info",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Profile Information",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"new.email@example.com\",\n  \"avatar\": \"avatar.jpg\"\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/editprofile"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve User's Friends List and Friendship Requests",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					}
+				],
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/friends/<user_id>"
+			},
+			"response": []
+		},
+		{
+			"name": "Create a New Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"body\": \"This is a new post.\",\n  \"attachments\": [1, 2]\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/posts/create"
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a Specific Post",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					}
+				],
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/posts/<post_id>"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Specific Post",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					}
+				],
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/posts/<post_id>/delete"
+			},
+			"response": []
+		},
+		{
+			"name": "Like a Specific Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					}
+				],
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/posts/<post_id>/like"
+			},
+			"response": []
+		},
+		{
+			"name": "Comment on a Specific Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <token>"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"body\": \"This is a comment on the post.\"\n}"
+				},
+				"url": "https://socialvibe-api-32609e33d535.herokuapp.com/api/posts/<post_id>/comment"
+			},
+			"response": []
+		}
+	]
+}
