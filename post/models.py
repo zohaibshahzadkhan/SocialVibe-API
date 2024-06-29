@@ -3,35 +3,41 @@ from django.db import models
 from django.utils.timesince import timesince
 from account.models import User
 
+
 class Like(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_by = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     body = models.TextField(blank=True, null=True)
-    created_by = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(
+        User, related_name="comments", on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ('created_at',)
-    
+        ordering = ("created_at",)
+
     def created_at_formatted(self):
-       return timesince(self.created_at)
-    
+        return timesince(self.created_at)
+
 
 class PostAttachment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    image = models.ImageField(upload_to='post_attachments')
-    created_by = models.ForeignKey(User, related_name='post_attachments', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="post_attachments")
+    created_by = models.ForeignKey(
+        User, related_name="post_attachments", on_delete=models.CASCADE
+    )
 
-
-    def get_image(self):    
+    def get_image(self):
         if self.image:
             return self.image.url
         else:
-            return 'https://picsum.photos/200/200'
+            return "https://picsum.photos/200/200"
+
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -48,11 +54,10 @@ class Post(models.Model):
     comments_count = models.IntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, related_name="posts", on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('-created_at',)
-    
+        ordering = ("-created_at",)
+
     def created_at_formatted(self):
-       return timesince(self.created_at)
-    
+        return timesince(self.created_at)

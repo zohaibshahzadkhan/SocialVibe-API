@@ -1,4 +1,3 @@
-from django.db.models import Q
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
@@ -9,27 +8,30 @@ from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
 from .forms import PostForm, AttachmentForm
 
 
-
-@api_view(['GET'])
+@api_view(["GET"])
 def post_list(request):
     posts = Post.objects.all()
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-@api_view(['GET'])
-def post_list_profile(request, id):   
+
+@api_view(["GET"])
+def post_list_profile(request, id):
     user = User.objects.get(pk=id)
     posts = Post.objects.filter(created_by_id=id)
     posts_serializer = PostSerializer(posts, many=True)
     user_serializer = UserSerializer(user)
 
-    return JsonResponse({
-        'posts': posts_serializer.data,
-        'user': user_serializer.data,
-    }, safe=False)
+    return JsonResponse(
+        {
+            "posts": posts_serializer.data,
+            "user": user_serializer.data,
+        },
+        safe=False,
+    )
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def post_create(request):
     form = PostForm(request.POST)
     attachment = None
@@ -56,9 +58,10 @@ def post_create(request):
 
         return JsonResponse(serializer.data, safe=False)
     else:
-        return JsonResponse({'error': 'unable to create post...'})
+        return JsonResponse({"error": "unable to create post..."})
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def post_like(request, pk):
     post = Post.objects.get(pk=pk)
 
@@ -70,20 +73,24 @@ def post_like(request, pk):
         post.likes.add(like)
         post.save()
 
-        return JsonResponse({'message': 'like created'})
+        return JsonResponse({"message": "like created"})
     else:
-        return JsonResponse({'message': 'post already liked'})
+        return JsonResponse({"message": "post already liked"})
 
-api_view(['GET'])
+
+api_view(["GET"])
+
+
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
-    return JsonResponse({
-        'post': PostDetailSerializer(post).data
-    })
+    return JsonResponse({"post": PostDetailSerializer(post).data})
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def post_create_comment(request, pk):
-    comment = Comment.objects.create(body=request.data.get('body'), created_by=request.user)
+    comment = Comment.objects.create(
+        body=request.data.get("body"), created_by=request.user
+    )
     post = Post.objects.get(pk=pk)
     post.comments.add(comment)
     post.comments_count = post.comments_count + 1
@@ -91,11 +98,12 @@ def post_create_comment(request, pk):
     serializer = CommentSerializer(comment)
     return JsonResponse(serializer.data, safe=False)
 
-@api_view(['DELETE'])
+
+@api_view(["DELETE"])
 def post_delete(request, pk):
     post = Post.objects.filter(created_by=request.user).get(pk=pk)
     post.delete()
     user = request.user
     user.posts_count = user.posts_count - 1
     user.save()
-    return JsonResponse({'message': 'post deleted'})
+    return JsonResponse({"message": "post deleted"})
