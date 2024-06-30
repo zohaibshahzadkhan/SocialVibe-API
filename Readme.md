@@ -106,7 +106,8 @@ These directories represent Django apps within the project, each responsible for
 - **GitHub**: Remote repository used to store project code.
 - **Heroku**: Cloud platform used for deploying the project into a live environment.
 - **Django REST Framework**: API toolkit used to build the backend API.
-- **Django AllAuth**: API module used for user authentication.
+- **jangorestframework-simplejwt (version 5.3.1)**: API module used for user authentication.
+  
 - **Psycopg2**: PostgreSQL database adaptor used as a PostgreSQL database adapter for Python.
 
 ### Additional Notes
@@ -294,7 +295,7 @@ All endpoints require authentication via JWT token for access. Users must obtain
 
 #### 1. Retrieve Authenticated User's Profile Information
 
-```http
+```https
 GET /api/me/
 Authorization: Bearer <token>
 
@@ -311,7 +312,7 @@ json
 ```
 #### 2. Register a New User
 
-```
+```https
 POST /api/signup/
 {
   "email": "newuser@example.com",
@@ -330,7 +331,7 @@ json
 
 #### 3. Obtain JWT Token (Login)
 
-```
+```https
 POST /api/login/
 {
   "email": "john.doe@example.com",
@@ -347,7 +348,7 @@ Response:
 
 #### 4. Refresh JWT Token
 
-```
+```https
 POST /api/refresh/
 {
   "refresh": "<refresh_token>"
@@ -362,7 +363,7 @@ Response:
 
 #### 5. Update User Profile Information
 
-```
+```https
 POST /api/editprofile/
 Authorization: Bearer <token>
 { "name": "John Doe"
@@ -382,12 +383,11 @@ Response:
   }
 }
 
-
 ```
 
 #### 6. Retrieve User's Friends List and Friendship Requests
 
-```
+```https
 GET /api/friends/5b9128ac-4fe5-4e7f-85e3-3a6a7e8ac5ea/
 Authorization: Bearer <token>
 
@@ -424,7 +424,7 @@ Response:
 
 #### 7. Create a New Post
 
-```
+```https
 POST /api/posts/create/
 Authorization: Bearer <token>
 {
@@ -463,7 +463,7 @@ Response:
 
 #### 8. Retrieve a Specific Post
 
-```
+```https
 GET /api/posts/3cc843f3-9d7d-4d58-8e2d-7f06ef3b122c/
 Authorization: Bearer <token>
 
@@ -499,7 +499,7 @@ Response:
 
 #### 9. Delete a Specific Post
 
-```
+```https
 DELETE /api/posts/3cc843f3-9d7d-4d58-8e2d-7f06ef3b122c/delete/
 Authorization: Bearer <token>
 
@@ -513,7 +513,7 @@ Response:
 
 #### 10. Like a Specific Post
 
-```
+```https
 POST /api/posts/3cc843f3-9d7d-4d58-8e2d-7f06ef3b122c/like/
 Authorization: Bearer <token>
 
@@ -527,7 +527,7 @@ Response:
 
 #### 11. Comment on a Specific Post
 
-```
+```https
 POST /api/posts/3cc843f3-9d7d-4d58-8e2d-7f06ef3b122c/comment/
 Authorization: Bearer <token>
 {
