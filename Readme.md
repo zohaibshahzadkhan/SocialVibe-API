@@ -661,3 +661,88 @@ Validation was performed on the following components:
   <summary>tests.py</summary>
   <img src="readme-media/validation/search-app//test.png" alt="tests.py">
   </details>
+
+## Deployment
+### Cloning & Forking
+#### Fork
+1. On GitHub.com, navigate to the [zohaibshahzadkhan/SocialVibe-API](https://github.com/zohaibshahzadkhan/SocialVibe-API) repository.
+2. In the top-right corner of the page, click Fork.
+3. By default, forks are named the same as their parent repositories. You can change the name of the fork to distinguish it further.
+4. Add a description to your fork.
+5. Click Create fork.
+
+#### Clone
+1. Above the list of files click the button that says 'Code'.
+2. Copy the URL for the repository.
+3. Open Terminal. Change the directory to the location where you want the cloned directory.
+4. Type git clone, and then paste the URL
+5. Press Enter.
+
+### Local Deployment
+1. On GitHub.com, navigate to the [zohaibshahzadkhan/SocialVibe-API](https://github.com/zohaibshahzadkhan/SocialVibe-API) repository and clone it.
+2. Once you clone the repository you will need to install the libraries, you can do this by typing "pip3 install -r requirements.txt" into the terminal from root directory of the project.
+3. Rename sample_env.py to .env file and change the key pair values to match your credentials. There is a [sample env file](./sample_env.py) that you can use. 
+4. Run `python3 manage.py runserver` from the root directory to run server locally
+
+### Remote Deployment 
+1. Log in to Heroku
+2. Click 'Create new app'.
+3. Give your application a unique name, select a region appropriate to your location and click the 'Create app' button.
+4. You can use an external database for example postgre or use 'Heroku Postgres' under the Add-ons section.
+5. Go to settings section and click 'Reveal Config Vars' in the Config vars section.
+6. Add CLOUDINARY_URL and the value as your cloudinary API key.
+7.  Add SECRET_KEY and the value as a complex string which will be used to provide cryptographic signing.
+8.  Add DATABASE_URL if you are using a different database than Heroku Postgres.
+9.  Add ALLOWED_HOST it will be deployed URL of the Api.
+10. Add CLIENT_ORIGIN it will be the frontend application interacting with the API. 
+11. Navigate to the 'Deploy' page
+12. Select 'GitHub' from the 'Deployment method' section
+13. Enter your github account details and select the forked/ clone repository.
+14. Select 'Manual deploy', select the 'main' branch in the drop down and click the 'Deploy' button.
+15. Once built, click the 'View' button to load the URL.
+
+### Database
+A Postgres database instance has been used for this project, provided by CodeInstitute.
+
+If you wish to use ElephantSQL follow these steps
+
+1. Open your web browser and go to the [ElephantSQL](https://www.elephantsql.com/) website.
+2. Sign up for a free account or log in if you already have an account.
+3. Once you have logged in, you will be taken to the Dashboard. From here, click on the "Create New Instance" button.
+4. You will now be taken to a page where you can configure your new database instance. Choose the "Tiny Turtle" plan which is free.
+5. Select the region where you want to host your database. The closest region to you is usually the best choice.
+6. Choose a name for your instance, this will be the name of your database.
+7. Choose a username and password for your instance.
+8. Click on the "Create" button to create your new database instance.
+9. The database url was stored in a config var: 'DATABASE_URL' on Heroku. This variable was then used in the settings.py to connect to the database.
+10. Click on the "Details" tab to view your instance details.
+11. Look for the "URI" field, which contains the connection details you need to connect to your database. The URI should start with: 'postgres://'
+
+The models were migrated to the database by entering the following commands in the terminal:
+
+```
+python3 manage.py makemigrations
+
+python3 manage.py migrate
+
+```
+ The live link can be found here - [SocialVibe-API](https://socialvibe-api-32609e33d535.herokuapp.com/)
+
+### Prerequisite
+- A Cloudinary account will be needed, create one for free at https://cloudinary.com.
+
+
+***
+
+## Credits
+
+- There has been useful guidance from various articles from Stack Overflow - [Stack Overflow ](https://stackoverflow.com/)
+
+- Django Documentation - [Django](https://docs.djangoproject.com/en/5.0/)
+
+- Lucid Chart - This helped me to design my flow charts and class diagrams - [Lucid Chart](https://lucid.app/)
+
+- Figma - This helped me to design my wire-frames - [Figma](https://www.figma.com/)
+
+## Acknowledgements
+I want to express my immense gratitude to Code Institute for their Django course. Throughout this program, I've gained valuable knowledge that has been instrumental in developing this application.
