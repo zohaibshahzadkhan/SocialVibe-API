@@ -83,7 +83,7 @@ class ViewTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.json()["message"], "friendship request updated")
+            response.json()["message"], "Friendship request updated")
 
     def test_editprofile_view(self):
         """
