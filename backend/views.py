@@ -11,5 +11,7 @@ def api_root(request):
 
     """
     return JsonResponse(
-        {"status": 200, "message": "Welcome to Socialvibe Django REST Framework API"}
+        {
+            "status": 200,
+            "message": "Welcome to Socialvibe Django REST Framework API"}
     )

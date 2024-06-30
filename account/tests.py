@@ -17,7 +17,7 @@ class ViewTests(TestCase):
         self.user2 = User.objects.create_user(
             email="user2@example.com", name="User Two", password="password2"
         )
-        self.client.force_authenticate(user=self.user1)  # Authenticate the client
+        self.client.force_authenticate(user=self.user1)
 
     def test_me_view(self):
         """
@@ -55,8 +55,13 @@ class ViewTests(TestCase):
         """
         Test retrieving the friends list and friendship requests for a user.
         """
-        FriendshipRequest.objects.create(created_for=self.user2, created_by=self.user1)
-        response = self.client.get(reverse("friends", kwargs={"pk": self.user2.id}))
+        FriendshipRequest.objects.create(
+            created_for=self.user2,
+            created_by=self.user1
+        )
+        response = self.client.get(
+            reverse("friends", kwargs={"pk": self.user2.id})
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("user", response.json())
         self.assertIn("friends", response.json())
@@ -66,14 +71,19 @@ class ViewTests(TestCase):
         """
         Test handling (accepting/rejecting) a friendship request.
         """
-        FriendshipRequest.objects.create(created_for=self.user1, created_by=self.user2)
+        FriendshipRequest.objects.create(
+            created_for=self.user1,
+            created_by=self.user2
+            )
         response = self.client.post(
             reverse(
-                "handle_request", kwargs={"pk": self.user2.id, "status": "accepted"}
+                "handle_request",
+                kwargs={"pk": self.user2.id, "status": "accepted"}
             )
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["message"], "friendship request updated")
+        self.assertEqual(
+            response.json()["message"], "friendship request updated")
 
     def test_editprofile_view(self):
         """
@@ -85,5 +95,7 @@ class ViewTests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["message"], "information updated")
-        self.assertEqual(response.json()["user"]["email"], "user1_new@example.com")
+        self.assertEqual(
+            response.json()["user"]["email"],
+            "user1_new@example.com")
         self.assertEqual(response.json()["user"]["name"], "User One Updated")

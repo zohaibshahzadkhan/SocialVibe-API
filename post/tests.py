@@ -19,12 +19,20 @@ class ViewTests(TestCase):
         self.user2 = User.objects.create_user(
             email="user2@example.com", name="User Two", password="password2"
         )
-        self.client.force_authenticate(user=self.user1)  # Authenticate the client
+        self.client.force_authenticate(user=self.user1)
 
         # Create some posts for testing
-        self.post1 = Post.objects.create(body="Test Post 1", created_by=self.user1)
-        self.post2 = Post.objects.create(body="Test Post 2", created_by=self.user2)
-        self.post3 = Post.objects.create(body="Test Post 3", created_by=self.user2)
+        self.post1 = Post.objects.create(
+            body="Test Post 1",
+            created_by=self.user1)
+        self.post2 = Post.objects.create(
+            body="Test Post 2",
+            created_by=self.user2
+            )
+        self.post3 = Post.objects.create(
+            body="Test Post 3",
+            created_by=self.user2
+        )
 
     def test_post_list(self):
         """
@@ -84,7 +92,8 @@ class ViewTests(TestCase):
         """
         Test retrieving details of a specific post.
         """
-        response = self.client.get(reverse("post_detail", kwargs={"pk": self.post1.id}))
+        response = self.client.get(
+            reverse("post_detail", kwargs={"pk": self.post1.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["post"]["id"], str(self.post1.id))
         self.assertEqual(response.json()["post"]["body"], self.post1.body)

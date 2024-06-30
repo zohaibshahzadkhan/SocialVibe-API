@@ -19,10 +19,10 @@ def search(request):
     users_serializer = UserSerializer(users, many=True)
 
     posts = Post.objects.filter(
-        Q(body__icontains=query, is_private=False) | 
+        Q(body__icontains=query, is_private=False) |
         Q(created_by_id__in=list(user_ids), body__icontains=query)
-    ) 
-    
+    )
+
     posts_serializer = PostSerializer(posts, many=True)
 
     return JsonResponse({

@@ -26,7 +26,8 @@ class SearchViewTests(TestCase):
             body="Public post about dogs", created_by=self.user1
         )
         self.post2 = Post.objects.create(
-            body="Private post about cats", created_by=self.user1, is_private=True
+            body="Private post about cats",
+            created_by=self.user1, is_private=True
         )
         self.post3 = Post.objects.create(
             body="Public post about birds", created_by=self.user2
@@ -45,7 +46,8 @@ class SearchViewTests(TestCase):
         response = self.client.post(url, {"query": query}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         posts = response.json()["posts"]
-        self.assertTrue(any(post["body"] == "Public post about dogs" for post in posts))
+        self.assertTrue(
+            any(post["body"] == "Public post about dogs" for post in posts))
         self.assertFalse(
             any(post["body"] == "Private post about cats" for post in posts)
         )
@@ -72,5 +74,6 @@ class SearchViewTests(TestCase):
 
         url = reverse("search")
         query = "birds"
-        response = unauthenticated_client.post(url, {"query": query}, format="json")
+        response = unauthenticated_client.post(
+            url, {"query": query}, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

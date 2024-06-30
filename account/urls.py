@@ -1,5 +1,9 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
 from . import views
 
 urlpatterns = [
@@ -15,6 +19,8 @@ urlpatterns = [
         name="send_friendship_request",
     ),
     path(
-        "friends/<uuid:pk>/<str:status>/", views.handle_request, name="handle_request"
+        "friends/<uuid:pk>/<str:status>/",
+        views.handle_request,
+        name="handle_request"
     ),
 ]

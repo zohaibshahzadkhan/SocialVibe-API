@@ -4,7 +4,11 @@ from rest_framework.decorators import api_view
 from account.models import User
 from account.serializers import UserSerializer
 from .models import Post, Like, Comment
-from .serializers import PostSerializer, PostDetailSerializer, CommentSerializer
+from .serializers import (
+    PostSerializer,
+    PostDetailSerializer,
+    CommentSerializer
+)
 from .forms import PostForm, AttachmentForm
 
 

@@ -58,7 +58,9 @@ def send_friendship_request(request, pk):
     )
 
     if not check1 or not check2:
-        FriendshipRequest.objects.create(created_for=user, created_by=request.user)
+        FriendshipRequest.objects.create(
+            created_for=user,
+            created_by=request.user)
         return JsonResponse({"message": "friendship request created"})
     else:
         return JsonResponse({"message": "request already sent"})
@@ -108,7 +110,9 @@ def handle_request(request, pk, status):
             created_for=request.user, created_by=user
         )
     except FriendshipRequest.DoesNotExist:
-        return JsonResponse({"error": "Friendship request not found"}, status=404)
+        return JsonResponse(
+            {"error": "Friendship request not found"},
+            status=404)
 
     if status not in [FriendshipRequest.ACCEPTED, FriendshipRequest.REJECTED]:
         return JsonResponse({"error": "Invalid status"}, status=400)
@@ -128,7 +132,9 @@ def handle_request(request, pk, status):
     elif status == FriendshipRequest.REJECTED:
         friendship_request.delete()
 
-    return JsonResponse({"message": "Friendship request updated", "status": status})
+    return JsonResponse({
+        "message": "Friendship request updated",
+        "status": status})
 
 
 @api_view(["POST"])
@@ -146,4 +152,7 @@ def editprofile(request):
 
         serializer = UserSerializer(user)
 
-        return JsonResponse({"message": "information updated", "user": serializer.data})
+        return JsonResponse({
+            "message": "information updated",
+            "user": serializer.data
+        })
